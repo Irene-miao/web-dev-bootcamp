@@ -1,7 +1,29 @@
 <%- include('partials/header.ejs'); -%>
 
-<div>
-    
+<div id="container">
+    <h1>Books I read</h1>
+    <p>A list of books that I read and wrote reviews on.</p>
+    <section>
+        <h2>List of book reviews</h2>
+        <% if (locals.reviews) { %>
+            <% reviews.forEach(function(review){ %>
+                <div class="card">
+                    <img src="<%= review.cover %>" heiight="50" width="50">
+                    <h5><%= review.title %></h5>
+                    <p><%= review.description %></p>
+                    <p><%= review.rating %></p>
+                </div>
+                
+
+           <% }); %>
+            <% } %>
+    </section>
+    <section>
+        <h2>Add new book review</h2>
+        <form>
+            <
+        </form>
+    </section>
 </div>
 
 <%- include('partials/footer.ejs'); -%>
