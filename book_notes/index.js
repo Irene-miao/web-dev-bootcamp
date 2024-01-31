@@ -24,6 +24,19 @@ const db = new pg.Client({
 });
 db.connect();
 
+let books = [];
+
+// Get all books and corresponding review
+async function getBooks(){
+const result = await db.query("select * from books");
+books = result.rows;
+return books;
+}
+
+async function getReviews(bookId) {
+const result = await db.query("secle")
+}
+
 // Axios to access book covers api
 async function fetchBookImage(url){
 const img = new Image();
@@ -35,8 +48,24 @@ return new Promise((res, rej) => {
 };
 
 
-app.get("/", (req, res) => {
+app.get("/", async(req, res) => {
 
+    
+    try {
+     const books = await getBooks();
+        console.log(books);
+    for ( let book of books) {
+
+    }
+     res.render("index.ejs", {
+        books: books
+     })
+    }catch(err){
+        console.log(err);
+        res.render("index.ejs", {
+            error: "Failure retrieving resource" + err.stack
+        })
+    };
 });
 
 app.post("/add", (req, res) => {

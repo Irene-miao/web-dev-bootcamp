@@ -3,27 +3,39 @@
 <div id="container">
     <h1>Books I read</h1>
     <p>A list of books that I read and wrote reviews on.</p>
+    <% if (locals.error) { %>
+        <p class="error"><%= error %></p>
+    <% } %>
     <section>
         <h2>List of book reviews</h2>
-        <% if (locals.reviews) { %>
-            <% reviews.forEach(function(review){ %>
+        <% if (locals.books) { %>
+            <% books.forEach(function(book){ %>
                 <div class="card">
-                    <img src="<%= review.cover %>" heiight="50" width="50">
-                    <h5><%= review.title %></h5>
-                    <p><%= review.description %></p>
-                    <p><%= review.rating %></p>
-                </div>
-                
+                    <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg" height="100" width="100">
+                    <h5><strong>Title: </strong> <%= book.title %></h5>
+                    <p><strong>Description: </strong><%= book.synopsis%></p>
 
+                    <p><strong>Rating: </strong></p>
+                   <p><strong>Reviews: </strong>
+                
+                </p>
+                </div>
+            
+                <div>
+                    <h2>Add new book review</h2>
+                    <form action="/add" method="post">
+                        <input type="text" name="bookId" value="<%= book.id %>">
+                        <button type="submit">Add review</button>
+                    </form>
+                </div>
            <% }); %>
-            <% } %>
+            <% } else { %>
+                <p>No book detail available</p>
+          <%  } %>
     </section>
-    <section>
-        <h2>Add new book review</h2>
-        <form>
-            <
-        </form>
-    </section>
+    
+       
+    
 </div>
 
 <%- include('partials/footer.ejs'); -%>
