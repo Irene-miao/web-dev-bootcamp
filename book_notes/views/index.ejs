@@ -1,41 +1,63 @@
 <%- include('partials/header.ejs'); -%>
 
-<div id="container">
-    <h1>Books I read</h1>
-    <p>A list of books that I read and wrote reviews on.</p>
-    <% if (locals.error) { %>
-        <p class="error"><%= error %></p>
-    <% } %>
+<div id="list">
+  <h1>Books I read</h1>
+  <p>A list of books that I read and wrote reviews about.</p>
+  <% if (locals.error) { %>
+  <p class="error"><%= error %></p>
+  <% } %>
     <section>
-        <h2>List of book reviews</h2>
-        <% if (locals.books) { %>
-            <% books.forEach(function(book){ %>
-                <div class="card">
-                    <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg" height="100" width="100">
-                    <h5><strong>Title: </strong> <%= book.title %></h5>
-                    <p><strong>Description: </strong><%= book.synopsis%></p>
+        <h2>List</h2>
+        <form action="/addBook" method="post">
+            <input type="hidden" name="add" value="book" />
+            <button type="submit">Add new book</button>
+        </form>
+        <% if (locals.books) { %> 
+        <% books.forEach(function(book){ %>
+        <div class="card">
+            <img
+                src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg"
+                height="300"
+                width="200"
+            />
+            <form action="deleteBook" method="post">
+                <input type="hidden" name="deleteBookId" value="<%= book.id%>" />
+                <button type="submit">Delete book</button>
+            </form>
+            <p><strong>Title: </strong> <%= book.title %></p>
+            <p><strong>Author: </strong><%= book.author%></p>
+            <p><strong>Synopsis: </strong><%= book.synopsis %></p>
+            <p><strong>Rating: </strong><%= book.rating %></p>
 
-                    <p><strong>Rating: </strong></p>
-                   <p><strong>Reviews: </strong>
-                
-                </p>
-                </div>
-            
-                <div>
-                    <h2>Add new book review</h2>
-                    <form action="/add" method="post">
-                        <input type="text" name="bookId" value="<%= book.id %>">
-                        <button type="submit">Add review</button>
-                    </form>
-                </div>
-           <% }); %>
+            <form action="/addReview" method="post">
+                <input type="hidden" name="bookId" value="<%= book.id %>" />
+                <button type="submit">Add review</button>
+            </form>
+
+        
+            <p><strong>Reviews:</strong></p>
+            <% if (locals.reviews) { %> 
+            <% reviews.forEach(function(review){ %> <%
+            if (review.book_id === book.id){ %>
+            <ul>
+            <li><%= review.review %></li>
+            </ul>
+            <form action="/deleteReview" method="post">
+            <input type="hidden" name="deleteReviewId" value="<%= review.id%>" />
+            <button type="submit">Delete review</button>
+            </form>
+            <% } %>
+             <% }) %>
+             <% } else { %>
+            <p>No reviews available</p>
+            <% } %>
+        
+            <% }) %> 
             <% } else { %>
-                <p>No book detail available</p>
-          <%  } %>
+            <p>No book detail available</p>
+            <% } %>
+        </div>
     </section>
-    
-       
-    
 </div>
 
 <%- include('partials/footer.ejs'); -%>

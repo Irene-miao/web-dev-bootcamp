@@ -20,3 +20,6 @@ insert into books(title, author, synopsis, isbn) values ('Vedic astrology', 'Kom
 insert into reviews(review, book_id, rating) values ('Interesting read.', 1, 4), ('Know more about my astrology sign.', 2, 6), ('Many of his thoughts helps me to think more.', 3, 7), ('Haha! Funny story.', 4, 7);
 
 select * from books join reviews on books.id = reviews.book_id;
+
+// group book reviews according book_id
+select books.title, books.author, array_agg(reviews.review) as reviews from books join reviews on books.id = reviews.book_id group by books.id;
