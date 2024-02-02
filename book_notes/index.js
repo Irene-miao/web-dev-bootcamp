@@ -84,19 +84,20 @@ app.post("/addBook", async (req, res) => {
 
 
 app.post("/addReview", async (req, res)=> {
-    console.log(req.body);
-    const bookId = req.body.bookId;
-    if (bookId) {
+  
+    if (req.body.add === "review") {
         res.render("newReview.ejs", {
-            bookId: bookId
+            bookId: req.body.bookId
+            
         });
     } else {
         console.log(req.body);
         const bookId = parseInt(req.body.bookId);
         const review = req.body.review;
         const rating = parseInt(req.body.rating);
-        const reviewId = await db.query("insert into reviews(book_id, review, rating) values($1, $2, $3) returning id", [bookId, review, rating]);
-        console.log(reviewId);
+        const result = await db.query("insert into reviews(book_id, review, rating) values($1, $2, $3) returning id", [bookId, review, rating]);
+        console.log(result.rows);
+        const reviewId = result.rows[0].id;
         if (reviewId) {
             res.redirect("/")
         }
@@ -106,7 +107,21 @@ app.post("/addReview", async (req, res)=> {
 
 
 app.post("/editReview", async (req, res) => {
-
+console.log(req.body);
+const editReviewId = req.body.editReviewId;
+if (req.body.edit === "review"){
+    res.render("newReview.ejs", {
+        reviewId : editReviewId
+        
+    })
+} else {
+    console.log(req.body);
+    const review = req.body.review;
+    const rating = parseInt(req.body.rating);
+    const reviewId = parseInt(req.body.reviewId);
+    await db.query("update reviews set review=$1, rating=$2 where id = $3", [review, rating, reviewId]);
+    res.redirect("/");
+}
 });
 
 app.post("/deleteBook", async (req, res)=> {
@@ -116,7 +131,10 @@ res.redirect("/");
 });
 
 app.post("/deleteReview", async (req, res)=>{
-
+console.log(req.body);
+const deleteReviewId = req.body.deleteReviewId;
+await db.query("delete from reviews where id = $1", [deleteReviewId]);
+res.redirect("/");
 });
 
 app.listen(port, ()=> {
