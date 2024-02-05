@@ -1,4 +1,4 @@
 ***
-Web Development Bootcamp Capstone Projects by Angela Yu
+Angel Yu Web Development Bootcamp Capstone Projects
 
 

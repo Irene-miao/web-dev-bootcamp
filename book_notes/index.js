@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import pg from "pg";
 
 
+
 const app = express();
 const port = 3000;
 
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 // serve static files
 app.use(express.static("public"));
+
 
 // Connect to postgres database
 const db = new pg.Client({
