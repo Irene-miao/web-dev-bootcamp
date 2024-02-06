@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 // serve static files
 app.use(express.static("public"));
 
+const PASSWORD = String(process.env.DB_PASSWORD);
 
 // Connect to postgres database
 const db = new pg.Client({

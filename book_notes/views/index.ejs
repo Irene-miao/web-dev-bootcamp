@@ -1,68 +1,94 @@
 <%- include('partials/header.ejs'); -%>
 
-<div id="list">
-  <h1>Books I read</h1>
-  <p>A list of books that I read and wrote reviews about.</p>
-  <% if (locals.error) { %>
-  <p class="error"><%= error %></p>
-  <% } %>
-    <section>
-        <h2>List</h2>
-        <form action="/addBook" method="post">
-            <input type="hidden" name="add" value="book" />
-            <button type="submit">Add new book</button>
-        </form>
-        <% if (locals.books) { %> 
-        <% books.forEach(function(book){ %>
-        <div class="card">
-            <img
-                src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg"
-                height="300"
-                width="200"
-            />
-            <form action="deleteBook" method="post">
-                <input type="hidden" name="deleteBookId" value="<%= book.id%>" />
-                <button type="submit">Delete book</button>
-            </form>
-            <p><strong>Title: </strong> <%= book.title %></p>
-            <p><strong>Author: </strong><%= book.author%></p>
-            <p><strong>Synopsis: </strong><%= book.synopsis %></p>
-            
-
-            <form action="/addReview" method="post">
-                <input type="hidden" name="add" value="review" />
-                <input type="hidden" name="bookId" value="<%= book.id %>" />
-                <button type="submit">Add review</button>
-            </form>
-
-        
-            <p><strong>Reviews:</strong></p>
-            <% if (locals.reviews) { %> 
-            <% reviews.forEach(function(review){ %> <%
-            if (review.book_id === book.id){ %>
-            <ul>
-            <li><%= review.review %></li>
-            </ul>
-            <form action="/editReview" method="post">
-            <input type="hidden" name="edit" value="review" />   
-            <input type="hidden" name="editReviewId" value="<%= review.id%>" />
-            <button type="submit">Edit review</button>
-            </form>
-            <form action="/deleteReview" method="post">
-            <input type="hidden" name="deleteReviewId" value="<%= review.id%>" />
-            <button type="submit">Delete review</button>
-            </form>
-            <p><strong>Rating: </strong><%= review.rating %></p>
+<div class="container">
+    <div class="row text-center">
+        <h1>Books I read</h1>
+        <p>A list of books that I read and wrote reviews about.</p>
+        <% if (locals.error) { %>
+            <p class="error"><%= error %></p>
             <% } %>
-             <% }) %>
-             <% } else { %>
-            <p>No reviews available</p>
-            <% } %>
+    </div>
+  
+  
+
+    <section class="row">
+        <div class="row">
+            <h2 class="col-8">List</h2>
+            <form class="col-4" action="/addBook" method="post">
+                <input type="hidden" name="add" value="book" />
+                <button class="add-btn" type="submit">Add new book</button>
+            </form>
+        </div>
         
-            <% }) %> 
+        <div class="row g-3">
+            <% if (locals.books) { %> 
+                <% books.forEach(function(book){ %>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <img
+                            src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg"
+                            height="225"
+                            width="100%" 
+                            alt="<%=book.title%>"      
+                            />
+                            <div class="card-body">
+                                <h5 class="card-title"><%= book.title %></h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary"><%= book.author%></h6>
+                            <p class="card-text"><%= book.synopsis %></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <form action="deleteBook" method="post">
+                                    <input type="hidden" name="deleteBookId" value="<%= book.id%>" />
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Delete book</button>
+                                </form> 
+                            
+                            </div>
+                            </div>
+                            <% if (locals.reviews) { %> 
+                                <% reviews.forEach(function(review){ %> <%
+                                if (review.book_id === book.id){ %>
+                                <div class="card-body">
+                                    <h5 class="card-title">Reviews: </h5>
+                                    <form class="col-6" action="/addReview" method="post">
+                                    <input type="hidden" name="add" value="review" />
+                                    <input type="hidden" name="bookId" value="<%= book.id %>" />
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Add review</button>
+                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                    <ul>
+                                        <li class="card-text"><%= review.review %></li>
+                                    </ul>
+                                    <div class="btn-group">
+                                        <form  action="/editReview" method="post">
+                                    <input type="hidden" name="edit" value="review" />   
+                                    <input type="hidden" name="editReviewId" value="<%= review.id%>" />
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Edit</button>
+                                    </form>
+                                    <form  action="/deleteReview" method="post">
+                                    <input type="hidden" name="deleteReviewId" value="<%= review.id%>" />
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Delete</button>
+                                    </form>
+                                    </div>
+                                    <div class="d-flex align-items-left p-2">
+                                        <h6 class="card-title">Rating:   </h6>
+                                        <p class="card-text"><%= review.rating %></p>
+                                    </div>
+                                
+                                </div>
+
+                            <% } %>
+                            <% }) %>
+                            <% } else { %>
+                            <p>No reviews available</p>
+                            <% } %>
+                        </div>
+                    </div>
+                
+                <% }) %> 
             <% } else { %>
-            <p>No book detail available</p>
+                <p>No book detail available</p>
             <% } %>
+        </div>  
+            
         </div>
     </section>
 </div>
