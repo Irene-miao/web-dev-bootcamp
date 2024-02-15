@@ -11,6 +11,8 @@ const port = 3000;
 // Parse req body
 app.use(bodyParser.urlencoded({ extended: true}));
 
+app.set('view engine', 'ejs');
+
 // serve static files
 app.use(express.static("public"));
 
